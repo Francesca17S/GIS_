@@ -7,17 +7,17 @@ A static map and an interactive map were plotted using created shape file.
 
 Packages used:
 
-sf
-rinat
-ggplot2
-rosm
-ggspatial
-leaflet
-htmltools
-mapview
-leafpop
-dplyr
-tidyverse
+sf,
+rinat,
+ggplot2,
+rosm,
+ggspatial,
+leaflet,
+htmltools,
+mapview,
+leafpop,
+dplyr,
+tidyverse.
 
 Document was knitted as an html document and can be viewed at:
-
+https://htmlview.glitch.me/?https://github.com/Francesca17S/GIS_/blob/main/README.html

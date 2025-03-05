@@ -1,0 +1,67 @@
+---
+title: "README"
+author: "Francesca Strydom"
+date: "2025-03-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+ Libraries
+
+```{r Libraries}
+library(sf)
+library(rinat)
+library(ggplot2)
+library(rosm)
+library(ggspatial)
+library(leaflet)
+library(htmltools)
+library(mapview)
+library(leafpop)
+library(dplyr)
+library(tidyverse)
+```
+
+
+# Data loading and refinement
+Defining the CRS (converting to Transverse Mercator)
+```{r}
+Fdat <- get_inat_obs(taxon_name = "Phoenicopterus roseus",
+                     geo = TRUE,
+                   maxresults = 5000)
+
+Fdat <- Fdat[Fdat$quality_grade == "research", ]
+
+Fdat <- st_as_sf(Fdat, coords = c("longitude", "latitude"), crs = 4326)
+
+Fdat <- st_transform(Fdat, crs = 32633)
+```
+
+# Static map
+
+```{r}
+ggplot() + 
+  annotation_map_tile(type = "hotstyle", progress = "none") + 
+  geom_sf(data = Fdat, colour = "pink")
+```
+
+
+# Interactive map
+Making the points' URLs clickable
+```{r}
+lf <- Fdat %>%
+  mutate(click_url = paste("<b><a href='", url, "'>Link to iNat observation</a></b>"))
+
+mapview(Fdat, 
+        popup = 
+          popupTable(lf, 
+                     zcol = c("user_login", "captive_cultivated", "click_url")),
+        col.regions = "pink",
+        map.types = "CartoDB.Positron",
+        layer.name = "Greater Flamingo Observations",
+        alpha = 1)
+```
+
